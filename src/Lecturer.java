@@ -16,6 +16,7 @@ public class Lecturer {
     private JButton addButton;
     private JPanel Main;
     private JButton editButton;
+    private JButton deleteButton;
 
     Connection con;
     PreparedStatement pst;
@@ -82,6 +83,23 @@ public class Lecturer {
                 }
             }
         });
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = table1.getSelectedRow();
+                if (selectedRow >= 0) {
+                    String tableName = tableMap.get(comboBox1.getSelectedItem());
+                    Object id = table1.getValueAt(selectedRow, 0);
+                    int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this record?", "Delete", JOptionPane.YES_NO_OPTION);
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        deleteRecord(tableName, id);
+                        loadSelectedTable(tableName);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Please select a record to delete");
+                }
+            }
+        });
     }
 
     public JPanel getMainPanel() {
@@ -122,7 +140,6 @@ public class Lecturer {
             DatabaseMetaData metaData = con.getMetaData();
             ResultSet columns = metaData.getColumns(null, null, tableName, null);
 
-            // Construct the query dynamically
             StringBuilder queryBuilder = new StringBuilder("SELECT * FROM ").append(tableName).append(" WHERE ");
             boolean first = true;
             while (columns.next()) {
@@ -149,4 +166,18 @@ public class Lecturer {
             throwables.printStackTrace();
         }
     }
+
+    void deleteRecord(String tableName, Object id) {
+        try {
+            String deleteQuery = "DELETE FROM " + tableName + " WHERE student_id = ?";
+            pst = con.prepareStatement(deleteQuery);
+            pst.setObject(1, id);
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Record deleted successfully");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error deleting record");
+        }
+    }
+
 }
