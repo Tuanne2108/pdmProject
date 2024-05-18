@@ -70,7 +70,16 @@ public class Lecturer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = table1.getSelectedRow();
-                System.out.println(STR."Selected row index: \{selectedRow}");
+                if (selectedRow>=0) {
+                    String tableName = tableMap.get(comboBox1.getSelectedItem());
+                    Object id = table1.getValueAt(selectedRow, 0);
+                    System.out.println("id:"+id);
+                    editStudent editForm = new editStudent(Lecturer.this, tableName,id);
+                    editForm.setContentPane(editForm.Main);
+                    editForm.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Please select a record to edit");
+                }
             }
         });
     }
@@ -94,16 +103,6 @@ public class Lecturer {
             System.out.println("Connected Successfully");
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    void table_load() {
-        try {
-            pst = con.prepareStatement("SELECT * FROM lecturer");
-            ResultSet rs = pst.executeQuery();
-            table1.setModel(DbUtils.resultSetToTableModel(rs));
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
     }
 
