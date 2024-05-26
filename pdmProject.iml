@@ -8,5 +8,17 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="mysql-connector-java-8.0.26" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/In-class Lab/PDM lab/Lab/Lab5/mssql-jdbc-12.2.0.jre8.jar!/" />
+          <root url="jar://C:/In-class Lab/PDM lab/Lab/Lab5/rs2xml.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://C:/In-class Lab/PDM lab/Lab/Lab5/rs2xml.jar!/src" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>

@@ -18,18 +18,14 @@ public class Student {
     Connection con;
     PreparedStatement pst;
 
-    // Map to hold display names and corresponding table names
     private final Map<String, String> tableMap = new HashMap<>();
 
     public Student() {
         connect();
-        table_load();
 
-        // Define the fields to populate in the comboBox1
         String[] displayFields = {"Examination", "Student Grade", "IT Supports"};
         String[] tableNames = {"examination", "grade_student", "it_support"};
 
-        // Populate the map
         for (int i = 0; i < displayFields.length; i++) {
             tableMap.put(displayFields[i], tableNames[i]);
         }
@@ -45,7 +41,6 @@ public class Student {
             }
         });
 
-        // Add action listener for the search button
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -79,16 +74,6 @@ public class Student {
         }
     }
 
-    void table_load() {
-        try {
-            pst = con.prepareStatement("SELECT * FROM student");
-            ResultSet rs = pst.executeQuery();
-            table1.setModel(DbUtils.resultSetToTableModel(rs));
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
-
     void loadSelectedTable(String tableName) {
         try {
             pst = con.prepareStatement("SELECT * FROM " + tableName);
@@ -101,11 +86,9 @@ public class Student {
 
     void searchInTable(String tableName, String searchTerm) {
         try {
-            // Get metadata to retrieve column names
             DatabaseMetaData metaData = con.getMetaData();
             ResultSet columns = metaData.getColumns(null, null, tableName, null);
 
-            // Construct the query dynamically
             StringBuilder queryBuilder = new StringBuilder("SELECT * FROM ").append(tableName).append(" WHERE ");
             boolean first = true;
             while (columns.next()) {
@@ -119,7 +102,6 @@ public class Student {
 
             pst = con.prepareStatement(queryBuilder.toString());
 
-            // Set the search term for all columns
             columns.beforeFirst();
             int index = 1;
             while (columns.next()) {
